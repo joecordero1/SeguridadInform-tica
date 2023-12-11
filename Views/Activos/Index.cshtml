@@ -13,39 +13,51 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Tipo)
+                @Html.DisplayNameFor(model => model.FirstOrDefault().Tipo)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Nombre)
+                @Html.DisplayNameFor(model => model.FirstOrDefault().Nombre)
             </th>
             <th>
                 Riesgos Asociados
+            </th>
+            <th>
+                Controles para mitigar
             </th>
             <th>Acciones</th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @foreach (var activo in Model)
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Tipo)
+                    @activo.Tipo
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Nombre)
+                    @activo.Nombre
                 </td>
                 <td>
-                    @foreach (var riesgoPorActivo in item.RiesgosPorActivo)
+                    @foreach (var rpa in activo.RiesgosPorActivo)
                     {
-                        @riesgoPorActivo.Riesgo.Descripcion
-
+                        @rpa.Riesgo.Descripcion
                         <br />
                     }
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id_Activo">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id_Activo">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id_Activo">Delete</a>
+                    @foreach (var rpa in activo.RiesgosPorActivo)
+                    {
+                        foreach (var control in rpa.Riesgo.ControlPorRiesgo.Select(cpr => cpr.Control).Distinct())
+                        {
+                            @control.Descripcion
+                            <br />
+                        }
+                    }
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@activo.Id_Activo">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@activo.Id_Activo">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@activo.Id_Activo">Delete</a>
                 </td>
             </tr>
         }

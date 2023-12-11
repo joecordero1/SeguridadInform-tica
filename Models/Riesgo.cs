@@ -10,6 +10,7 @@ namespace SeguridadInformática.Models
         public string? Tipo { get; set; }
 
         public virtual ICollection<RiesgoPorActivo> RiesgosPorActivo { get; set; } // Colección para la relación
+        public virtual ICollection<ControlPorRiesgo> ControlPorRiesgo { get; set; } // Colección para la relación
     }
 
 }

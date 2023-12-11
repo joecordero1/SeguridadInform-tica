@@ -24,7 +24,9 @@ namespace SeguridadInformática.Controllers
         {
             var activos = await _context.Activo
                 .Include(a => a.RiesgosPorActivo)
-                .ThenInclude(rpa => rpa.Riesgo)
+                    .ThenInclude(rpa => rpa.Riesgo)
+                        .ThenInclude(r => r.ControlPorRiesgo)
+                            .ThenInclude(cpr => cpr.Control)
                 .ToListAsync();
 
             return View(activos);
@@ -55,7 +57,6 @@ namespace SeguridadInformática.Controllers
         {
             return View();
         }
-
         // POST: Activos/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -65,10 +66,43 @@ namespace SeguridadInformática.Controllers
             {
                 _context.Add(activo);
                 await _context.SaveChangesAsync();
+
+                if (activo.Tipo == "HW")
+                {
+                    // IDs de los riesgos para activos de tipo "HW"
+                    int[] riesgosIds = new[] { 1, 2, 3 };
+                    foreach (var riesgoId in riesgosIds)
+                    {
+                        var riesgo = await _context.Riesgo.FindAsync(riesgoId);
+                        if (riesgo != null)
+                        {
+                            _context.RiesgoPorActivo.Add(new RiesgoPorActivo { Id_Activo = activo.Id_Activo, Id_Riesgo = riesgo.Id_Riesgo });
+
+                            // Asignar controles específicos para el riesgo con Id 1
+                            if (riesgo.Tipo == "[N] Desastres Naturales" && riesgoId == 1)
+                            {
+                                int[] controlesIds = new[] { 83, 92, 102, 103 };
+                                foreach (var controlId in controlesIds)
+                                {
+                                    var control = await _context.Control.FindAsync(controlId);
+                                    if (control != null)
+                                    {
+                                        _context.ControlPorRiesgo.Add(new ControlPorRiesgo { Id_Riesgo = riesgo.Id_Riesgo, Id_Control = control.Id_Control });
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    await _context.SaveChangesAsync();
+                }
+
                 return RedirectToAction(nameof(Index));
             }
+
             return View(activo);
         }
+
 
 
         // GET: Activos/Edit/5

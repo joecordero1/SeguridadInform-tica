@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SeguridadInformática.Data;
 
@@ -10,9 +11,10 @@ using SeguridadInformática.Data;
 namespace SeguridadInformática.Migrations
 {
     [DbContext(typeof(SeguridadInformáticaContext))]
-    partial class SeguridadInformáticaContextModelSnapshot : ModelSnapshot
+    [Migration("20231211170619_ajustesCuarta")]
+    partial class ajustesCuarta
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
