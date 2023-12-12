@@ -55,6 +55,8 @@ namespace SeguridadInformática.Controllers
         // GET: Activos/Create
         public IActionResult Create()
         {
+            // Crear una lista de selección para los tipos de activos.
+            ViewBag.TipoSelectList = new SelectList(new List<string> { "D", "KEYS", "S", "SW", "HW", "COM", "MEDIA", "AUX", "L", "P", "D.LOG","D.CONF" });
             return View();
         }
         // POST: Activos/Create
@@ -70,7 +72,7 @@ namespace SeguridadInformática.Controllers
                 if (activo.Tipo == "HW")
                 {
                     // IDs de los riesgos para activos de tipo "HW"
-                    int[] riesgosIds = new[] { 1, 2, 3 };
+                    int[] riesgosIds = new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 15, 17, 33, 34, 35, 40, 41, 45, 52, 53, 54, 55, 56 };
                     foreach (var riesgoId in riesgosIds)
                     {
                         var riesgo = await _context.Riesgo.FindAsync(riesgoId);
@@ -79,9 +81,45 @@ namespace SeguridadInformática.Controllers
                             _context.RiesgoPorActivo.Add(new RiesgoPorActivo { Id_Activo = activo.Id_Activo, Id_Riesgo = riesgo.Id_Riesgo });
 
                             // Asignar controles específicos para el riesgo con Id 1
-                            if (riesgo.Tipo == "[N] Desastres Naturales" && riesgoId == 1)
+                            if (riesgo.Tipo == "[N] Desastres Naturales")
                             {
                                 int[] controlesIds = new[] { 83, 92, 102, 103 };
+                                foreach (var controlId in controlesIds)
+                                {
+                                    var control = await _context.Control.FindAsync(controlId);
+                                    if (control != null)
+                                    {
+                                        _context.ControlPorRiesgo.Add(new ControlPorRiesgo { Id_Riesgo = riesgo.Id_Riesgo, Id_Control = control.Id_Control });
+                                    }
+                                }
+                            }
+                            if (riesgo.Tipo == "[I] De origen industrial")
+                            {
+                                int[] controlesIds = new[] { 53, 55, 63, 66, 89, 90, 95, 103 };
+                                foreach (var controlId in controlesIds)
+                                {
+                                    var control = await _context.Control.FindAsync(controlId);
+                                    if (control != null)
+                                    {
+                                        _context.ControlPorRiesgo.Add(new ControlPorRiesgo { Id_Riesgo = riesgo.Id_Riesgo, Id_Control = control.Id_Control });
+                                    }
+                                }
+                            }
+                            if (riesgo.Tipo == "[E] Errores y fallos no intencionados")
+                            {
+                                int[] controlesIds = new[] { 5, 16, 19, 20, 44, 48, 35, 95, 100, 103 };
+                                foreach (var controlId in controlesIds)
+                                {
+                                    var control = await _context.Control.FindAsync(controlId);
+                                    if (control != null)
+                                    {
+                                        _context.ControlPorRiesgo.Add(new ControlPorRiesgo { Id_Riesgo = riesgo.Id_Riesgo, Id_Control = control.Id_Control });
+                                    }
+                                }
+                            }
+                            if (riesgo.Tipo == "[A] Ataques intencionados")
+                            {
+                                int[] controlesIds = new[] { 2,3,7,8, 12, 14, 63, 66, 75, 76, 91, 95, 103, 106 };
                                 foreach (var controlId in controlesIds)
                                 {
                                     var control = await _context.Control.FindAsync(controlId);
@@ -95,6 +133,665 @@ namespace SeguridadInformática.Controllers
                     }
 
                     await _context.SaveChangesAsync();
+                }else if (activo.Tipo == "MEDIA")
+                {
+                    // IDs de los riesgos para activos de tipo "HW"
+                    int[] riesgosIds = new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 14, 15, 16, 17, 25, 28, 29, 30, 33, 35, 41, 45, 49,50,51,52,55,56 };
+                    foreach (var riesgoId in riesgosIds)
+                    {
+                        var riesgo = await _context.Riesgo.FindAsync(riesgoId);
+                        if (riesgo != null)
+                        {
+                            _context.RiesgoPorActivo.Add(new RiesgoPorActivo { Id_Activo = activo.Id_Activo, Id_Riesgo = riesgo.Id_Riesgo });
+
+                            // Asignar controles específicos para el riesgo con Id 1
+                            if (riesgo.Tipo == "[N] Desastres Naturales")
+                            {
+                                int[] controlesIds = new[] { 83, 92, 102, 103 };
+                                foreach (var controlId in controlesIds)
+                                {
+                                    var control = await _context.Control.FindAsync(controlId);
+                                    if (control != null)
+                                    {
+                                        _context.ControlPorRiesgo.Add(new ControlPorRiesgo { Id_Riesgo = riesgo.Id_Riesgo, Id_Control = control.Id_Control });
+                                    }
+                                }
+                            }
+                            if (riesgo.Tipo == "[I] De origen industrial")
+                            {
+                                int[] controlesIds = new[] { 53, 55, 63, 66, 89, 90, 95, 103 };
+                                foreach (var controlId in controlesIds)
+                                {
+                                    var control = await _context.Control.FindAsync(controlId);
+                                    if (control != null)
+                                    {
+                                        _context.ControlPorRiesgo.Add(new ControlPorRiesgo { Id_Riesgo = riesgo.Id_Riesgo, Id_Control = control.Id_Control });
+                                    }
+                                }
+                            }
+                            if (riesgo.Tipo == "[E] Errores y fallos no intencionados")
+                            {
+                                int[] controlesIds = new[] { 5, 16, 19, 20, 44, 48, 35, 95, 100, 103 };
+                                foreach (var controlId in controlesIds)
+                                {
+                                    var control = await _context.Control.FindAsync(controlId);
+                                    if (control != null)
+                                    {
+                                        _context.ControlPorRiesgo.Add(new ControlPorRiesgo { Id_Riesgo = riesgo.Id_Riesgo, Id_Control = control.Id_Control });
+                                    }
+                                }
+                            }
+                            if (riesgo.Tipo == "[A] Ataques intencionados")
+                            {
+                                int[] controlesIds = new[] { 2, 3, 7, 8, 12, 14, 63, 66, 75, 76, 91, 95, 103, 106 };
+                                foreach (var controlId in controlesIds)
+                                {
+                                    var control = await _context.Control.FindAsync(controlId);
+                                    if (control != null)
+                                    {
+                                        _context.ControlPorRiesgo.Add(new ControlPorRiesgo { Id_Riesgo = riesgo.Id_Riesgo, Id_Control = control.Id_Control });
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    await _context.SaveChangesAsync();
+
+                }
+                else if (activo.Tipo == "AUX")
+                {
+                    // IDs de los riesgos para activos de tipo "HW"
+                    int[] riesgosIds = new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 15, 33, 35, 41, 45, 52, 53, 55, 56 };
+                    foreach (var riesgoId in riesgosIds)
+                    {
+                        var riesgo = await _context.Riesgo.FindAsync(riesgoId);
+                        if (riesgo != null)
+                        {
+                            _context.RiesgoPorActivo.Add(new RiesgoPorActivo { Id_Activo = activo.Id_Activo, Id_Riesgo = riesgo.Id_Riesgo });
+
+                            // Asignar controles específicos para el riesgo con Id 1
+                            if (riesgo.Tipo == "[N] Desastres Naturales")
+                            {
+                                int[] controlesIds = new[] { 83, 92, 102, 103 };
+                                foreach (var controlId in controlesIds)
+                                {
+                                    var control = await _context.Control.FindAsync(controlId);
+                                    if (control != null)
+                                    {
+                                        _context.ControlPorRiesgo.Add(new ControlPorRiesgo { Id_Riesgo = riesgo.Id_Riesgo, Id_Control = control.Id_Control });
+                                    }
+                                }
+                            }
+                            if (riesgo.Tipo == "[I] De origen industrial")
+                            {
+                                int[] controlesIds = new[] { 53, 55, 63, 66, 89, 90, 95, 103 };
+                                foreach (var controlId in controlesIds)
+                                {
+                                    var control = await _context.Control.FindAsync(controlId);
+                                    if (control != null)
+                                    {
+                                        _context.ControlPorRiesgo.Add(new ControlPorRiesgo { Id_Riesgo = riesgo.Id_Riesgo, Id_Control = control.Id_Control });
+                                    }
+                                }
+                            }
+                            if (riesgo.Tipo == "[E] Errores y fallos no intencionados")
+                            {
+                                int[] controlesIds = new[] { 5, 16, 19, 20, 44, 48, 35, 95, 100, 103 };
+                                foreach (var controlId in controlesIds)
+                                {
+                                    var control = await _context.Control.FindAsync(controlId);
+                                    if (control != null)
+                                    {
+                                        _context.ControlPorRiesgo.Add(new ControlPorRiesgo { Id_Riesgo = riesgo.Id_Riesgo, Id_Control = control.Id_Control });
+                                    }
+                                }
+                            }
+                            if (riesgo.Tipo == "[A] Ataques intencionados")
+                            {
+                                int[] controlesIds = new[] { 2, 3, 7, 8, 12, 14, 63, 66, 75, 76, 91, 95, 103, 106 };
+                                foreach (var controlId in controlesIds)
+                                {
+                                    var control = await _context.Control.FindAsync(controlId);
+                                    if (control != null)
+                                    {
+                                        _context.ControlPorRiesgo.Add(new ControlPorRiesgo { Id_Riesgo = riesgo.Id_Riesgo, Id_Control = control.Id_Control });
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    await _context.SaveChangesAsync();
+
+                }
+                else if (activo.Tipo == "L")
+                {
+                    // IDs de los riesgos para activos de tipo "HW"
+                    int[] riesgosIds = new[] { 1, 2, 3, 4, 5, 6, 15, 25, 26, 28, 29, 30, 41, 45, 49, 50, 51, 56, 57 };
+                    foreach (var riesgoId in riesgosIds)
+                    {
+                        var riesgo = await _context.Riesgo.FindAsync(riesgoId);
+                        if (riesgo != null)
+                        {
+                            _context.RiesgoPorActivo.Add(new RiesgoPorActivo { Id_Activo = activo.Id_Activo, Id_Riesgo = riesgo.Id_Riesgo });
+
+                            // Asignar controles específicos para el riesgo con Id 1
+                            if (riesgo.Tipo == "[N] Desastres Naturales")
+                            {
+                                int[] controlesIds = new[] { 83, 92, 102, 103 };
+                                foreach (var controlId in controlesIds)
+                                {
+                                    var control = await _context.Control.FindAsync(controlId);
+                                    if (control != null)
+                                    {
+                                        _context.ControlPorRiesgo.Add(new ControlPorRiesgo { Id_Riesgo = riesgo.Id_Riesgo, Id_Control = control.Id_Control });
+                                    }
+                                }
+                            }
+                            if (riesgo.Tipo == "[I] De origen industrial")
+                            {
+                                int[] controlesIds = new[] { 53, 55, 63, 66, 89, 90, 95, 103 };
+                                foreach (var controlId in controlesIds)
+                                {
+                                    var control = await _context.Control.FindAsync(controlId);
+                                    if (control != null)
+                                    {
+                                        _context.ControlPorRiesgo.Add(new ControlPorRiesgo { Id_Riesgo = riesgo.Id_Riesgo, Id_Control = control.Id_Control });
+                                    }
+                                }
+                            }
+                            if (riesgo.Tipo == "[E] Errores y fallos no intencionados")
+                            {
+                                int[] controlesIds = new[] { 5, 16, 19, 20, 44, 48, 35, 95, 100, 103 };
+                                foreach (var controlId in controlesIds)
+                                {
+                                    var control = await _context.Control.FindAsync(controlId);
+                                    if (control != null)
+                                    {
+                                        _context.ControlPorRiesgo.Add(new ControlPorRiesgo { Id_Riesgo = riesgo.Id_Riesgo, Id_Control = control.Id_Control });
+                                    }
+                                }
+                            }
+                            if (riesgo.Tipo == "[A] Ataques intencionados")
+                            {
+                                int[] controlesIds = new[] { 2, 3, 7, 8, 12, 14, 63, 66, 75, 76, 91, 95, 103, 106 };
+                                foreach (var controlId in controlesIds)
+                                {
+                                    var control = await _context.Control.FindAsync(controlId);
+                                    if (control != null)
+                                    {
+                                        _context.ControlPorRiesgo.Add(new ControlPorRiesgo { Id_Riesgo = riesgo.Id_Riesgo, Id_Control = control.Id_Control });
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    await _context.SaveChangesAsync();
+
+                }
+                else if (activo.Tipo == "D")
+                {
+                    // IDs de los riesgos para activos de tipo "HW"
+                    int[] riesgosIds = new[] { 16, 17, 25, 26, 28, 29, 30, 39, 40, 45, 49, 50, 51 };
+                    foreach (var riesgoId in riesgosIds)
+                    {
+                        var riesgo = await _context.Riesgo.FindAsync(riesgoId);
+                        if (riesgo != null)
+                        {
+                            _context.RiesgoPorActivo.Add(new RiesgoPorActivo { Id_Activo = activo.Id_Activo, Id_Riesgo = riesgo.Id_Riesgo });
+
+                            // Asignar controles específicos para el riesgo con Id 1
+                            if (riesgo.Tipo == "[N] Desastres Naturales")
+                            {
+                                int[] controlesIds = new[] { 83, 92, 102, 103 };
+                                foreach (var controlId in controlesIds)
+                                {
+                                    var control = await _context.Control.FindAsync(controlId);
+                                    if (control != null)
+                                    {
+                                        _context.ControlPorRiesgo.Add(new ControlPorRiesgo { Id_Riesgo = riesgo.Id_Riesgo, Id_Control = control.Id_Control });
+                                    }
+                                }
+                            }
+                            if (riesgo.Tipo == "[I] De origen industrial")
+                            {
+                                int[] controlesIds = new[] { 53, 55, 63, 66, 89, 90, 95, 103 };
+                                foreach (var controlId in controlesIds)
+                                {
+                                    var control = await _context.Control.FindAsync(controlId);
+                                    if (control != null)
+                                    {
+                                        _context.ControlPorRiesgo.Add(new ControlPorRiesgo { Id_Riesgo = riesgo.Id_Riesgo, Id_Control = control.Id_Control });
+                                    }
+                                }
+                            }
+                            if (riesgo.Tipo == "[E] Errores y fallos no intencionados")
+                            {
+                                int[] controlesIds = new[] { 5, 16, 19, 20, 44, 48, 35, 95, 100, 103 };
+                                foreach (var controlId in controlesIds)
+                                {
+                                    var control = await _context.Control.FindAsync(controlId);
+                                    if (control != null)
+                                    {
+                                        _context.ControlPorRiesgo.Add(new ControlPorRiesgo { Id_Riesgo = riesgo.Id_Riesgo, Id_Control = control.Id_Control });
+                                    }
+                                }
+                            }
+                            if (riesgo.Tipo == "[A] Ataques intencionados")
+                            {
+                                int[] controlesIds = new[] { 2, 3, 7, 8, 12, 14, 63, 66, 75, 76, 91, 95, 103, 106 };
+                                foreach (var controlId in controlesIds)
+                                {
+                                    var control = await _context.Control.FindAsync(controlId);
+                                    if (control != null)
+                                    {
+                                        _context.ControlPorRiesgo.Add(new ControlPorRiesgo { Id_Riesgo = riesgo.Id_Riesgo, Id_Control = control.Id_Control });
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    await _context.SaveChangesAsync();
+
+                }
+                else if (activo.Tipo == "KEYS")
+                {
+                    // IDs de los riesgos para activos de tipo "HW"
+                    int[] riesgosIds = new[] { 16, 17, 25, 26, 28, 29, 30, 39, 40, 45, 49, 50, 51 };
+                    foreach (var riesgoId in riesgosIds)
+                    {
+                        var riesgo = await _context.Riesgo.FindAsync(riesgoId);
+                        if (riesgo != null)
+                        {
+                            _context.RiesgoPorActivo.Add(new RiesgoPorActivo { Id_Activo = activo.Id_Activo, Id_Riesgo = riesgo.Id_Riesgo });
+
+                            // Asignar controles específicos para el riesgo con Id 1
+                            if (riesgo.Tipo == "[N] Desastres Naturales")
+                            {
+                                int[] controlesIds = new[] { 83, 92, 102, 103 };
+                                foreach (var controlId in controlesIds)
+                                {
+                                    var control = await _context.Control.FindAsync(controlId);
+                                    if (control != null)
+                                    {
+                                        _context.ControlPorRiesgo.Add(new ControlPorRiesgo { Id_Riesgo = riesgo.Id_Riesgo, Id_Control = control.Id_Control });
+                                    }
+                                }
+                            }
+                            if (riesgo.Tipo == "[I] De origen industrial")
+                            {
+                                int[] controlesIds = new[] { 53, 55, 63, 66, 89, 90, 95, 103 };
+                                foreach (var controlId in controlesIds)
+                                {
+                                    var control = await _context.Control.FindAsync(controlId);
+                                    if (control != null)
+                                    {
+                                        _context.ControlPorRiesgo.Add(new ControlPorRiesgo { Id_Riesgo = riesgo.Id_Riesgo, Id_Control = control.Id_Control });
+                                    }
+                                }
+                            }
+                            if (riesgo.Tipo == "[E] Errores y fallos no intencionados")
+                            {
+                                int[] controlesIds = new[] { 5, 16, 19, 20, 44, 48, 35, 95, 100, 103 };
+                                foreach (var controlId in controlesIds)
+                                {
+                                    var control = await _context.Control.FindAsync(controlId);
+                                    if (control != null)
+                                    {
+                                        _context.ControlPorRiesgo.Add(new ControlPorRiesgo { Id_Riesgo = riesgo.Id_Riesgo, Id_Control = control.Id_Control });
+                                    }
+                                }
+                            }
+                            if (riesgo.Tipo == "[A] Ataques intencionados")
+                            {
+                                int[] controlesIds = new[] { 2, 3, 7, 8, 12, 14, 63, 66, 75, 76, 91, 95, 103, 106 };
+                                foreach (var controlId in controlesIds)
+                                {
+                                    var control = await _context.Control.FindAsync(controlId);
+                                    if (control != null)
+                                    {
+                                        _context.ControlPorRiesgo.Add(new ControlPorRiesgo { Id_Riesgo = riesgo.Id_Riesgo, Id_Control = control.Id_Control });
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    await _context.SaveChangesAsync();
+
+                }
+                else if (activo.Tipo == "S")
+                {
+                    // IDs de los riesgos para activos de tipo "HW"
+                    int[] riesgosIds = new[] { 16, 17, 22, 23, 25, 26, 28, 29, 30, 34, 39, 40, 41, 43, 44, 45, 47, 49, 50, 51, 53, 54 };
+                    foreach (var riesgoId in riesgosIds)
+                    {
+                        var riesgo = await _context.Riesgo.FindAsync(riesgoId);
+                        if (riesgo != null)
+                        {
+                            _context.RiesgoPorActivo.Add(new RiesgoPorActivo { Id_Activo = activo.Id_Activo, Id_Riesgo = riesgo.Id_Riesgo });
+
+                            // Asignar controles específicos para el riesgo con Id 1
+                            if (riesgo.Tipo == "[N] Desastres Naturales")
+                            {
+                                int[] controlesIds = new[] { 83, 92, 102, 103 };
+                                foreach (var controlId in controlesIds)
+                                {
+                                    var control = await _context.Control.FindAsync(controlId);
+                                    if (control != null)
+                                    {
+                                        _context.ControlPorRiesgo.Add(new ControlPorRiesgo { Id_Riesgo = riesgo.Id_Riesgo, Id_Control = control.Id_Control });
+                                    }
+                                }
+                            }
+                            if (riesgo.Tipo == "[I] De origen industrial")
+                            {
+                                int[] controlesIds = new[] { 53, 55, 63, 66, 89, 90, 95, 103 };
+                                foreach (var controlId in controlesIds)
+                                {
+                                    var control = await _context.Control.FindAsync(controlId);
+                                    if (control != null)
+                                    {
+                                        _context.ControlPorRiesgo.Add(new ControlPorRiesgo { Id_Riesgo = riesgo.Id_Riesgo, Id_Control = control.Id_Control });
+                                    }
+                                }
+                            }
+                            if (riesgo.Tipo == "[E] Errores y fallos no intencionados")
+                            {
+                                int[] controlesIds = new[] { 5, 16, 19, 20, 44, 48, 35, 95, 100, 103 };
+                                foreach (var controlId in controlesIds)
+                                {
+                                    var control = await _context.Control.FindAsync(controlId);
+                                    if (control != null)
+                                    {
+                                        _context.ControlPorRiesgo.Add(new ControlPorRiesgo { Id_Riesgo = riesgo.Id_Riesgo, Id_Control = control.Id_Control });
+                                    }
+                                }
+                            }
+                            if (riesgo.Tipo == "[A] Ataques intencionados")
+                            {
+                                int[] controlesIds = new[] { 2, 3, 7, 8, 12, 14, 63, 66, 75, 76, 91, 95, 103, 106 };
+                                foreach (var controlId in controlesIds)
+                                {
+                                    var control = await _context.Control.FindAsync(controlId);
+                                    if (control != null)
+                                    {
+                                        _context.ControlPorRiesgo.Add(new ControlPorRiesgo { Id_Riesgo = riesgo.Id_Riesgo, Id_Control = control.Id_Control });
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    await _context.SaveChangesAsync();
+
+                }
+                else if (activo.Tipo == "SW")
+                {
+                    // IDs de los riesgos para activos de tipo "HW"
+                    int[] riesgosIds = new[] { 9, 16, 17, 21, 22, 23, 25, 26, 28, 29, 30, 31, 32, 39, 40, 41, 42, 43, 44, 45, 49, 50, 51 };
+                    foreach (var riesgoId in riesgosIds)
+                    {
+                        var riesgo = await _context.Riesgo.FindAsync(riesgoId);
+                        if (riesgo != null)
+                        {
+                            _context.RiesgoPorActivo.Add(new RiesgoPorActivo { Id_Activo = activo.Id_Activo, Id_Riesgo = riesgo.Id_Riesgo });
+
+                            // Asignar controles específicos para el riesgo con Id 1
+                            if (riesgo.Tipo == "[N] Desastres Naturales")
+                            {
+                                int[] controlesIds = new[] { 83, 92, 102, 103 };
+                                foreach (var controlId in controlesIds)
+                                {
+                                    var control = await _context.Control.FindAsync(controlId);
+                                    if (control != null)
+                                    {
+                                        _context.ControlPorRiesgo.Add(new ControlPorRiesgo { Id_Riesgo = riesgo.Id_Riesgo, Id_Control = control.Id_Control });
+                                    }
+                                }
+                            }
+                            if (riesgo.Tipo == "[I] De origen industrial")
+                            {
+                                int[] controlesIds = new[] { 53, 55, 63, 66, 89, 90, 95, 103 };
+                                foreach (var controlId in controlesIds)
+                                {
+                                    var control = await _context.Control.FindAsync(controlId);
+                                    if (control != null)
+                                    {
+                                        _context.ControlPorRiesgo.Add(new ControlPorRiesgo { Id_Riesgo = riesgo.Id_Riesgo, Id_Control = control.Id_Control });
+                                    }
+                                }
+                            }
+                            if (riesgo.Tipo == "[E] Errores y fallos no intencionados")
+                            {
+                                int[] controlesIds = new[] { 5, 16, 19, 20, 44, 48, 35, 95, 100, 103 };
+                                foreach (var controlId in controlesIds)
+                                {
+                                    var control = await _context.Control.FindAsync(controlId);
+                                    if (control != null)
+                                    {
+                                        _context.ControlPorRiesgo.Add(new ControlPorRiesgo { Id_Riesgo = riesgo.Id_Riesgo, Id_Control = control.Id_Control });
+                                    }
+                                }
+                            }
+                            if (riesgo.Tipo == "[A] Ataques intencionados")
+                            {
+                                int[] controlesIds = new[] { 2, 3, 7, 8, 12, 14, 63, 66, 75, 76, 91, 95, 103, 106 };
+                                foreach (var controlId in controlesIds)
+                                {
+                                    var control = await _context.Control.FindAsync(controlId);
+                                    if (control != null)
+                                    {
+                                        _context.ControlPorRiesgo.Add(new ControlPorRiesgo { Id_Riesgo = riesgo.Id_Riesgo, Id_Control = control.Id_Control });
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    await _context.SaveChangesAsync();
+
+                }
+                else if (activo.Tipo == "D.LOG")
+                {
+                    // IDs de los riesgos para activos de tipo "HW"
+                    int[] riesgosIds = new[] { 18, 37, 38, 47 };
+                    foreach (var riesgoId in riesgosIds)
+                    {
+                        var riesgo = await _context.Riesgo.FindAsync(riesgoId);
+                        if (riesgo != null)
+                        {
+                            _context.RiesgoPorActivo.Add(new RiesgoPorActivo { Id_Activo = activo.Id_Activo, Id_Riesgo = riesgo.Id_Riesgo });
+
+                            // Asignar controles específicos para el riesgo con Id 1
+                            if (riesgo.Tipo == "[N] Desastres Naturales")
+                            {
+                                int[] controlesIds = new[] { 83, 92, 102, 103 };
+                                foreach (var controlId in controlesIds)
+                                {
+                                    var control = await _context.Control.FindAsync(controlId);
+                                    if (control != null)
+                                    {
+                                        _context.ControlPorRiesgo.Add(new ControlPorRiesgo { Id_Riesgo = riesgo.Id_Riesgo, Id_Control = control.Id_Control });
+                                    }
+                                }
+                            }
+                            if (riesgo.Tipo == "[I] De origen industrial")
+                            {
+                                int[] controlesIds = new[] { 53, 55, 63, 66, 89, 90, 95, 103 };
+                                foreach (var controlId in controlesIds)
+                                {
+                                    var control = await _context.Control.FindAsync(controlId);
+                                    if (control != null)
+                                    {
+                                        _context.ControlPorRiesgo.Add(new ControlPorRiesgo { Id_Riesgo = riesgo.Id_Riesgo, Id_Control = control.Id_Control });
+                                    }
+                                }
+                            }
+                            if (riesgo.Tipo == "[E] Errores y fallos no intencionados")
+                            {
+                                int[] controlesIds = new[] { 5, 16, 19, 20, 44, 48, 35, 95, 100, 103 };
+                                foreach (var controlId in controlesIds)
+                                {
+                                    var control = await _context.Control.FindAsync(controlId);
+                                    if (control != null)
+                                    {
+                                        _context.ControlPorRiesgo.Add(new ControlPorRiesgo { Id_Riesgo = riesgo.Id_Riesgo, Id_Control = control.Id_Control });
+                                    }
+                                }
+                            }
+                            if (riesgo.Tipo == "[A] Ataques intencionados")
+                            {
+                                int[] controlesIds = new[] { 2, 3, 7, 8, 12, 14, 63, 66, 75, 76, 91, 95, 103, 106 };
+                                foreach (var controlId in controlesIds)
+                                {
+                                    var control = await _context.Control.FindAsync(controlId);
+                                    if (control != null)
+                                    {
+                                        _context.ControlPorRiesgo.Add(new ControlPorRiesgo { Id_Riesgo = riesgo.Id_Riesgo, Id_Control = control.Id_Control });
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    await _context.SaveChangesAsync();
+
+                }
+                else if (activo.Tipo == "D.CONF")
+                {
+                    // IDs de los riesgos para activos de tipo "HW"
+                    int[] riesgosIds = new[] { 19 };
+                    foreach (var riesgoId in riesgosIds)
+                    {
+                        var riesgo = await _context.Riesgo.FindAsync(riesgoId);
+                        if (riesgo != null)
+                        {
+                            _context.RiesgoPorActivo.Add(new RiesgoPorActivo { Id_Activo = activo.Id_Activo, Id_Riesgo = riesgo.Id_Riesgo });
+
+                            // Asignar controles específicos para el riesgo con Id 1
+                            if (riesgo.Tipo == "[N] Desastres Naturales")
+                            {
+                                int[] controlesIds = new[] { 83, 92, 102, 103 };
+                                foreach (var controlId in controlesIds)
+                                {
+                                    var control = await _context.Control.FindAsync(controlId);
+                                    if (control != null)
+                                    {
+                                        _context.ControlPorRiesgo.Add(new ControlPorRiesgo { Id_Riesgo = riesgo.Id_Riesgo, Id_Control = control.Id_Control });
+                                    }
+                                }
+                            }
+                            if (riesgo.Tipo == "[I] De origen industrial")
+                            {
+                                int[] controlesIds = new[] { 53, 55, 63, 66, 89, 90, 95, 103 };
+                                foreach (var controlId in controlesIds)
+                                {
+                                    var control = await _context.Control.FindAsync(controlId);
+                                    if (control != null)
+                                    {
+                                        _context.ControlPorRiesgo.Add(new ControlPorRiesgo { Id_Riesgo = riesgo.Id_Riesgo, Id_Control = control.Id_Control });
+                                    }
+                                }
+                            }
+                            if (riesgo.Tipo == "[E] Errores y fallos no intencionados")
+                            {
+                                int[] controlesIds = new[] { 5, 16, 19, 20, 44, 48, 35, 95, 100, 103 };
+                                foreach (var controlId in controlesIds)
+                                {
+                                    var control = await _context.Control.FindAsync(controlId);
+                                    if (control != null)
+                                    {
+                                        _context.ControlPorRiesgo.Add(new ControlPorRiesgo { Id_Riesgo = riesgo.Id_Riesgo, Id_Control = control.Id_Control });
+                                    }
+                                }
+                            }
+                            if (riesgo.Tipo == "[A] Ataques intencionados")
+                            {
+                                int[] controlesIds = new[] { 2, 3, 7, 8, 12, 14, 63, 66, 75, 76, 91, 95, 103, 106 };
+                                foreach (var controlId in controlesIds)
+                                {
+                                    var control = await _context.Control.FindAsync(controlId);
+                                    if (control != null)
+                                    {
+                                        _context.ControlPorRiesgo.Add(new ControlPorRiesgo { Id_Riesgo = riesgo.Id_Riesgo, Id_Control = control.Id_Control });
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    await _context.SaveChangesAsync();
+
+                }
+                else if (activo.Tipo == "P")
+                {
+                    // IDs de los riesgos para activos de tipo "HW"
+                    int[] riesgosIds = new[] { 20, 30, 36, 58, 59, 60 };
+                    foreach (var riesgoId in riesgosIds)
+                    {
+                        var riesgo = await _context.Riesgo.FindAsync(riesgoId);
+                        if (riesgo != null)
+                        {
+                            _context.RiesgoPorActivo.Add(new RiesgoPorActivo { Id_Activo = activo.Id_Activo, Id_Riesgo = riesgo.Id_Riesgo });
+
+                            // Asignar controles específicos para el riesgo con Id 1
+                            if (riesgo.Tipo == "[N] Desastres Naturales")
+                            {
+                                int[] controlesIds = new[] { 83, 92, 102, 103 };
+                                foreach (var controlId in controlesIds)
+                                {
+                                    var control = await _context.Control.FindAsync(controlId);
+                                    if (control != null)
+                                    {
+                                        _context.ControlPorRiesgo.Add(new ControlPorRiesgo { Id_Riesgo = riesgo.Id_Riesgo, Id_Control = control.Id_Control });
+                                    }
+                                }
+                            }
+                            if (riesgo.Tipo == "[I] De origen industrial")
+                            {
+                                int[] controlesIds = new[] { 53, 55, 63, 66, 89, 90, 95, 103 };
+                                foreach (var controlId in controlesIds)
+                                {
+                                    var control = await _context.Control.FindAsync(controlId);
+                                    if (control != null)
+                                    {
+                                        _context.ControlPorRiesgo.Add(new ControlPorRiesgo { Id_Riesgo = riesgo.Id_Riesgo, Id_Control = control.Id_Control });
+                                    }
+                                }
+                            }
+                            if (riesgo.Tipo == "[E] Errores y fallos no intencionados")
+                            {
+                                int[] controlesIds = new[] { 5, 16, 19, 20, 44, 48, 35, 95, 100, 103 };
+                                foreach (var controlId in controlesIds)
+                                {
+                                    var control = await _context.Control.FindAsync(controlId);
+                                    if (control != null)
+                                    {
+                                        _context.ControlPorRiesgo.Add(new ControlPorRiesgo { Id_Riesgo = riesgo.Id_Riesgo, Id_Control = control.Id_Control });
+                                    }
+                                }
+                            }
+                            if (riesgo.Tipo == "[A] Ataques intencionados")
+                            {
+                                int[] controlesIds = new[] { 2, 3, 7, 8, 12, 14, 63, 66, 75, 76, 91, 95, 103, 106 };
+                                foreach (var controlId in controlesIds)
+                                {
+                                    var control = await _context.Control.FindAsync(controlId);
+                                    if (control != null)
+                                    {
+                                        _context.ControlPorRiesgo.Add(new ControlPorRiesgo { Id_Riesgo = riesgo.Id_Riesgo, Id_Control = control.Id_Control });
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    await _context.SaveChangesAsync();
+
                 }
 
                 return RedirectToAction(nameof(Index));
@@ -195,5 +892,6 @@ namespace SeguridadInformática.Controllers
         {
           return (_context.Activo?.Any(e => e.Id_Activo == id)).GetValueOrDefault();
         }
+
     }
 }
