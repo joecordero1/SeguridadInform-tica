@@ -19,7 +19,23 @@
                 <select asp-for="Tipo" asp-items="@(ViewBag.TipoSelectList)" class="form-control"></select>
                 <span asp-validation-for="Tipo" class="text-danger"></span>
             </div>
-
+            <!-- Añadir las descripciones de los tipos de activos aquí -->
+            <div class="row">
+                <div class="col-md-8">
+                    <ul>
+                        <li>[D] Datos / Información</li>
+                        <li>[K] Claves criptográficas</li>
+                        <li>[S] Servicios</li>
+                        <li>[SW] Software - Aplicaciones informáticas</li>
+                        <li>[HW] Hardware - Equipamiento informático</li>
+                        <li>[COM] Redes de comunicación</li>
+                        <li>[MEDIA] Soporte de información</li>
+                        <li>[AUX] Equipamiento Auxiliar</li>
+                        <li>[L] Instalaciones</li>
+                        <li>[P] Personal</li>
+                    </ul>
+                </div>
+            </div>
             <div class="form-group">
                 <label asp-for="Nombre" class="control-label"></label>
                 <input asp-for="Nombre" class="form-control" />
@@ -32,6 +48,8 @@
         </form>
     </div>
 </div>
+
+
 
 <div>
     <a asp-action="Index">Back to List</a>

@@ -7,6 +7,7 @@ namespace SeguridadInformática.Models;
         public int Id_Activo { get; set; }
         public string? Tipo { get; set; }
         public string? Nombre { get; set; }
+        public string? Subtipo {  get; set; }
 
         public virtual ICollection<RiesgoPorActivo>? RiesgosPorActivo { get; set; }
 }

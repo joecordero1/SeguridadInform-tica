@@ -59,7 +59,16 @@ namespace SeguridadInformática.Controllers
             ViewBag.TipoSelectList = new SelectList(new List<string> { "D", "KEYS", "S", "SW", "HW", "COM", "MEDIA", "AUX", "L", "P", "D.LOG","D.CONF" });
             return View();
         }
+
+        public IActionResult Create()
+        {
+            ViewBag.TipoSelectList = new SelectList(new List<string> { "Building", "Local" });
+            return View();
+        
+        }
+
         // POST: Activos/Create
+        /*
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Tipo,Nombre")] Activo activo)
@@ -80,7 +89,7 @@ namespace SeguridadInformática.Controllers
                         {
                             _context.RiesgoPorActivo.Add(new RiesgoPorActivo { Id_Activo = activo.Id_Activo, Id_Riesgo = riesgo.Id_Riesgo });
 
-                            // Asignar controles específicos para el riesgo con Id 1
+                            // Asignar controles específicos para el riesgo
                             if (riesgo.Tipo == "[N] Desastres Naturales")
                             {
                                 int[] controlesIds = new[] { 83, 92, 102, 103 };
@@ -794,6 +803,70 @@ namespace SeguridadInformática.Controllers
 
                 }
 
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View(activo);
+        }
+        */
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("Tipo,Nombre")] Activo activo)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(activo);
+                await _context.SaveChangesAsync();
+
+                var controlesAsignados = new HashSet<(int Id_Riesgo, int Id_Control)>();
+                var riesgosIds = activo.Tipo switch
+                {
+                    "HW" => new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 15, 17, 33, 34, 35, 40, 41, 45, 52, 53, 54, 55, 56 },
+                    "MEDIA" => new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 14, 15, 16, 17, 25, 28, 29, 30, 33, 35, 41, 45, 49, 50, 51, 52, 55, 56 },
+                    "AUX" => new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 15, 33, 35, 41, 45, 52, 53, 55, 56 },
+                    "L" => new[] { 1, 2, 3, 4, 5, 6, 15, 25, 26, 28, 29, 30, 41, 45, 49, 50, 51, 56, 57 },
+                    "D" => new[] { 16, 17, 25, 26, 28, 29, 30, 39, 40, 45, 49, 50, 51 },
+                    "KEYS" => new[] { 16, 17, 25, 26, 28, 29, 30, 39, 40, 45, 49, 50, 51 },
+                    "S" => new[] { 16, 17, 22, 23, 25, 26, 28, 29, 30, 34, 39, 40, 41, 43, 44, 45, 47, 49, 50, 51, 53, 54 },
+                    "SW" => new[] { 9, 16, 17, 21, 22, 23, 25, 26, 28, 29, 30, 31, 32, 39, 40, 41, 42, 43, 44, 45, 49, 50, 51 },
+                    "D.LOG" => new[] { 18, 37, 38, 47 },
+                    "D.CONF" => new[] { 19 },
+                    "P" => new[] { 20, 30, 36, 58, 59, 60 },
+                    // ... agregar más tipos de activos aquí ...
+                    _ => Array.Empty<int>()
+                };
+
+                foreach (var riesgoId in riesgosIds)
+                {
+                    var riesgo = await _context.Riesgo.FindAsync(riesgoId);
+                    if (riesgo != null)
+                    {
+                        _context.RiesgoPorActivo.Add(new RiesgoPorActivo { Id_Activo = activo.Id_Activo, Id_Riesgo = riesgo.Id_Riesgo });
+
+                        var controlesIds = riesgo.Tipo switch
+                        {
+                            "[N] Desastres Naturales" => new[] { 83, 92, 102, 103 },
+                            "[I] De origen industrial" => new[] { 53, 55, 63, 66, 89, 90, 95, 103 },
+                            "[E] Errores y fallos no intencionados" => new[] { 5, 16, 19, 20, 44, 48, 35, 95, 100, 103 },
+                            "[A] Ataques intencionados" => new[] { 2, 3, 7, 8, 12, 14, 63, 66, 75, 76, 91, 95, 103, 106 },
+                            _ => Array.Empty<int>()
+                        };
+
+                        foreach (var controlId in controlesIds)
+                        {
+                            if (controlesAsignados.Add((riesgo.Id_Riesgo, controlId)))
+                            {
+                                var control = await _context.Control.FindAsync(controlId);
+                                if (control != null)
+                                {
+                                    _context.ControlPorRiesgo.Add(new ControlPorRiesgo { Id_Riesgo = riesgo.Id_Riesgo, Id_Control = control.Id_Control });
+                                }
+                            }
+                        }
+                    }
+                }
+
+                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
 
